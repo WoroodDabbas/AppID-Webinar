@@ -11,39 +11,32 @@ const app = express();
 // and is meant for debugging and developing.
 // For a list of stores, see compatible session stores below
 // https://www.npmjs.com/package/express-session#compatible-session-stores
-// app.use(
-//   session({
-//     secret: "123456",
-//     resave: true,
-//     saveUninitialized: true
-//   })
-// );
-// app.use(passport.initialize());
-// app.use(passport.session());
-// passport.serializeUser((user, cb) => cb(null, user));
-// passport.deserializeUser((user, cb) => cb(null, user));
-// passport.use(
-//   new WebAppStrategy({
-//     tenantId: "",
-//     clientId: "",
-//     secret: "",
-//     oauthServerUrl:
-//       "https://us-south.appid.cloud.ibm.com/oauth/v4/08543878-e0a9-4541-a694-7fd30a0bfd4e",
-//     redirectUri: "http://localhost:3000/appid/callback"
-//   })
-// );
+app.use(
+  session({
+    secret: "123456",
+    resave: true,
+    saveUninitialized: true
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser((user, cb) => cb(null, user));
+passport.deserializeUser((user, cb) => cb(null, user));
+passport.use(
+  new WebAppStrategy({
+    tenantId: "",
+    clientId: "",
+    secret: "",
+    oauthServerUrl: "",
+    redirectUri: "http://localhost:3000/appid/callback"
+  })
+);
 
-// // Handle callback
-// app.get("/appid/callback", passport.authenticate(WebAppStrategy.STRATEGY_NAME));
+// Handle callback
+app.get("/appid/callback", passport.authenticate(WebAppStrategy.STRATEGY_NAME));
 
-// Handle logout
-// app.get("/appid/logout", function(req, res) {
-//   WebAppStrategy.logout(req);
-//   res.redirect("/"); // redirects to the root of the application
-// });
-
-// // Protect the whole app
-// app.use(passport.authenticate(WebAppStrategy.STRATEGY_NAME));
+// Protect the whole app
+app.use(passport.authenticate(WebAppStrategy.STRATEGY_NAME));
 
 // Serve static resources
 app.use(express.static("./public"));
